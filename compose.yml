@@ -79,6 +79,8 @@ services:
       - ./export:/usr/src/paperless/export
       - convert_tmp:/tmp/paperless-convert
       - paperless_tmp:/tmp/paperless
+      - ./docker-overrides/skip-init:/etc/s6-overlay/s6-rc.d/init-migrations/run:ro
+      - ./docker-overrides/skip-init:/etc/s6-overlay/s6-rc.d/init-search-index/run:ro
     mem_limit: 512m
     cpus: 0.5
 
@@ -102,6 +104,8 @@ services:
       - ./export:/usr/src/paperless/export
       - convert_tmp:/tmp/paperless-convert
       - paperless_tmp:/tmp/paperless
+      - ./docker-overrides/skip-init:/etc/s6-overlay/s6-rc.d/init-migrations/run:ro
+      - ./docker-overrides/skip-init:/etc/s6-overlay/s6-rc.d/init-search-index/run:ro
     mem_limit: 6g
     cpus: 4.0
 
@@ -126,6 +130,8 @@ services:
       - ./export:/usr/src/paperless/export
       - convert_tmp:/tmp/paperless-convert
       - paperless_tmp:/tmp/paperless
+      - ./docker-overrides/skip-init:/etc/s6-overlay/s6-rc.d/init-migrations/run:ro
+      - ./docker-overrides/skip-init:/etc/s6-overlay/s6-rc.d/init-search-index/run:ro
     mem_limit: 512m
     cpus: 0.5
 
