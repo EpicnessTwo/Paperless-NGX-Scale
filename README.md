@@ -52,8 +52,9 @@ This template intentionally leaves full init enabled for `paperless-web`, then d
 
 - `init-migrations/run`: prevents consumer, worker, and scheduler from running Django database migrations.
 - `init-search-index/run`: prevents consumer, worker, and scheduler from concurrently rebuilding the search index.
+- `init-superuser/run`: prevents consumer, worker, and scheduler from creating or updating the admin user.
 
-Only `paperless-web` should run migrations and search-index init.
+Only `paperless-web` should run migrations, search-index init, and admin-user management.
 
 ## Init Steps Left Enabled
 
@@ -65,8 +66,6 @@ Non-web containers still run useful container-local init steps:
 - Wait-for-PostgreSQL.
 - Wait-for-Redis.
 - Django system checks.
-
-If `PAPERLESS_ADMIN_USER` is later added to `paperless.env`, consider also skipping `init-superuser/run` in non-web containers to avoid repeated admin-user DB writes.
 
 If `PAPERLESS_OCR_LANGUAGES` is later added, each Paperless container may try to install Tesseract language packages on startup. Prefer a custom image for production use if extra OCR language packages are required.
 
