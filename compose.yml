@@ -40,8 +40,11 @@ services:
         condition: service_healthy
     ports:
       - "8008:8000"
+      - "5555:5555"
     env_file:
       - ./paperless.env
+    environment:
+      PAPERLESS_ENABLE_FLOWER: true
     volumes:
       - data:/usr/src/paperless/data
       - media:/usr/src/paperless/media
