@@ -90,8 +90,6 @@ services:
     restart: unless-stopped
     command: ["/etc/s6-overlay/s6-rc.d/svc-worker/run"]
     depends_on:
-      paperless-web:
-        condition: service_healthy
       db:
         condition: service_healthy
       broker:
@@ -108,7 +106,7 @@ services:
       - ./docker-overrides/skip-init:/etc/s6-overlay/s6-rc.d/init-migrations/run:ro
       - ./docker-overrides/skip-init:/etc/s6-overlay/s6-rc.d/init-search-index/run:ro
       - ./docker-overrides/skip-init:/etc/s6-overlay/s6-rc.d/init-superuser/run:ro
-    mem_limit: 6g
+    mem_limit: 1g
     cpus: 4.0
 
   paperless-scheduler:
