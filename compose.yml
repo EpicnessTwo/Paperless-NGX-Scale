@@ -45,12 +45,16 @@ services:
       - ./paperless.env
     environment:
       PAPERLESS_ENABLE_FLOWER: true
+      PAPERLESS_TASK_WORKERS: 1
+      PAPERLESS_THREADS_PER_WORKER: 1
+      PAPERLESS_WEBSERVER_WORKERS: 2
     volumes:
       - data:/usr/src/paperless/data
       - media:/usr/src/paperless/media
       - ./consume:/usr/src/paperless/consume
       - ./export:/usr/src/paperless/export
       - paperless_tmp:/tmp/paperless
+      - ./docker-overrides/skip-init:/etc/s6-overlay/s6-rc.d/init-worker/run:ro
     mem_limit: 1g
     cpus: 1.0
     healthcheck:
@@ -60,31 +64,31 @@ services:
       retries: 30
       start_period: 90s
 
-  paperless-consumer:
-    image: ghcr.io/paperless-ngx/paperless-ngx:2.20.1
-    container_name: paperless-consumer
-    restart: unless-stopped
-    command: ["/etc/s6-overlay/s6-rc.d/svc-consumer/run"]
-    depends_on:
-      paperless-web:
-        condition: service_healthy
-      db:
-        condition: service_healthy
-      broker:
-        condition: service_healthy
-    env_file:
-      - ./paperless.env
-    volumes:
-      - data:/usr/src/paperless/data
-      - media:/usr/src/paperless/media
-      - ./consume:/usr/src/paperless/consume
-      - ./export:/usr/src/paperless/export
-      - paperless_tmp:/tmp/paperless
-      - ./docker-overrides/skip-init:/etc/s6-overlay/s6-rc.d/init-migrations/run:ro
-      - ./docker-overrides/skip-init:/etc/s6-overlay/s6-rc.d/init-search-index/run:ro
-      - ./docker-overrides/skip-init:/etc/s6-overlay/s6-rc.d/init-superuser/run:ro
-    mem_limit: 512m
-    cpus: 0.5
+#  paperless-consumer:
+#    image: ghcr.io/paperless-ngx/paperless-ngx:2.20.1
+#    container_name: paperless-consumer
+#    restart: unless-stopped
+#    command: ["/etc/s6-overlay/s6-rc.d/svc-consumer/run"]
+#    depends_on:
+#      paperless-web:
+#        condition: service_healthy
+#      db:
+#        condition: service_healthy
+#      broker:
+#        condition: service_healthy
+#    env_file:
+#      - ./paperless.env
+#    volumes:
+#      - data:/usr/src/paperless/data
+#      - media:/usr/src/paperless/media
+#      - ./consume:/usr/src/paperless/consume
+#      - ./export:/usr/src/paperless/export
+#      - paperless_tmp:/tmp/paperless
+#      - ./docker-overrides/skip-init:/etc/s6-overlay/s6-rc.d/init-migrations/run:ro
+#      - ./docker-overrides/skip-init:/etc/s6-overlay/s6-rc.d/init-search-index/run:ro
+#      - ./docker-overrides/skip-init:/etc/s6-overlay/s6-rc.d/init-superuser/run:ro
+#    mem_limit: 512m
+#    cpus: 0.5
 
   paperless-worker:
     image: ghcr.io/paperless-ngx/paperless-ngx:2.20.1
@@ -97,6 +101,9 @@ services:
         condition: service_healthy
     env_file:
       - ./paperless.env
+    environment:
+      PAPERLESS_TASK_WORKERS: 1
+      PAPERLESS_THREADS_PER_WORKER: 2
     volumes:
       - data:/usr/src/paperless/data
       - media:/usr/src/paperless/media
