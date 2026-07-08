@@ -54,7 +54,6 @@ services:
       - ./consume:/usr/src/paperless/consume
       - ./export:/usr/src/paperless/export
       - paperless_tmp:/tmp/paperless
-      - ./docker-overrides/skip-init:/etc/s6-overlay/s6-rc.d/init-worker/run:ro
     mem_limit: 1g
     cpus: 1.0
     healthcheck:
